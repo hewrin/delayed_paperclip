@@ -16,10 +16,10 @@ module DelayedPaperclip
     end
 
     def detect_background_task
-      return DelayedPaperclip::Jobs::Sidekiq    if defined? ::Sidekiq
       return DelayedPaperclip::Jobs::ActiveJob  if defined? ::ActiveJob::Base
       return DelayedPaperclip::Jobs::DelayedJob if defined? ::Delayed::Job
       return DelayedPaperclip::Jobs::Resque     if defined? ::Resque
+      return DelayedPaperclip::Jobs::Sidekiq    if defined? ::Sidekiq
     end
 
     def processor
@@ -115,7 +115,7 @@ module DelayedPaperclip
     def enqueue_post_processing_for name
       byebug
       DelayedPaperclip.enqueue(self.class.name, read_attribute(:id), name.to_sym)
-    endp
+    end
 
     def prepare_enqueueing_for name
       byebug
