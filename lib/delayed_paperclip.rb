@@ -16,6 +16,7 @@ module DelayedPaperclip
     end
 
     def detect_background_task
+      byebug
       return DelayedPaperclip::Jobs::ActiveJob  if defined? ::ActiveJob::Base
       return DelayedPaperclip::Jobs::DelayedJob if defined? ::Delayed::Job
       return DelayedPaperclip::Jobs::Resque     if defined? ::Resque
@@ -23,14 +24,17 @@ module DelayedPaperclip
     end
 
     def processor
+      byebug
       options[:background_job_class]
     end
 
     def enqueue(instance_klass, instance_id, attachment_name)
+      byebug
       processor.enqueue_delayed_paperclip(instance_klass, instance_id, attachment_name)
     end
 
     def process_job(instance_klass, instance_id, attachment_name)
+      byebug
       instance_klass.constantize.unscoped.find(instance_id).
         send(attachment_name).
         process_delayed!
@@ -63,7 +67,7 @@ module DelayedPaperclip
       }.each do |option, default|
 
         paperclip_definitions[name][:delayed][option] = options.key?(option) ? options[option] : default
-
+        byebug
       end
 
       # Sets callback
