@@ -8,11 +8,12 @@ module DelayedPaperclip
 
       def self.enqueue_delayed_paperclip(instance_klass, instance_id, attachment_name)
         perform_async(instance_klass, instance_id, attachment_name)
+        byebug
+        Image.find(instance_id).update(finished: true)
       end
 
       def perform(instance_klass, instance_id, attachment_name)
         DelayedPaperclip.process_job(instance_klass, instance_id, attachment_name)
-        Image.find(instance_id).update(finished: true)
       end
     end
   end
