@@ -16,25 +16,21 @@ module DelayedPaperclip
     end
 
     def detect_background_task
-      byebug
+      return DelayedPaperclip::Jobs::Sidekiq    if defined? ::Sidekiq
       return DelayedPaperclip::Jobs::ActiveJob  if defined? ::ActiveJob::Base
       return DelayedPaperclip::Jobs::DelayedJob if defined? ::Delayed::Job
       return DelayedPaperclip::Jobs::Resque     if defined? ::Resque
-      return DelayedPaperclip::Jobs::Sidekiq    if defined? ::Sidekiq
     end
 
     def processor
-      byebug
       options[:background_job_class]
     end
 
     def enqueue(instance_klass, instance_id, attachment_name)
-      byebug
       processor.enqueue_delayed_paperclip(instance_klass, instance_id, attachment_name)
     end
 
     def process_job(instance_klass, instance_id, attachment_name)
-      byebug
       instance_klass.constantize.unscoped.find(instance_id).
         send(attachment_name).
         process_delayed!
@@ -119,7 +115,7 @@ module DelayedPaperclip
     def enqueue_post_processing_for name
       byebug
       DelayedPaperclip.enqueue(self.class.name, read_attribute(:id), name.to_sym)
-    end
+    endp
 
     def prepare_enqueueing_for name
       byebug
