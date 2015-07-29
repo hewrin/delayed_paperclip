@@ -119,8 +119,6 @@ module DelayedPaperclip
       end
       @_enqued_for_processing ||= []
       @_enqued_for_processing << name
-      self.update(finished: true)
     end
-
   end
 end
