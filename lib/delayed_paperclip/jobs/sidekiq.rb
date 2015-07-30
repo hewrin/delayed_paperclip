@@ -22,7 +22,7 @@ module DelayedPaperclip
         puts "perforn method starts"
         puts "*********************"
         DelayedPaperclip.process_job(instance_klass, instance_id, attachment_name)
-        byebug
+        Image.find(instance_id).update_columns(finished: true)
         puts "*********************" 
         puts "perforn method ends"
         puts "*********************"
