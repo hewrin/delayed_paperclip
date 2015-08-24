@@ -12,7 +12,7 @@ module DelayedPaperclip
 
       def perform(instance_klass, instance_id, attachment_name)
         DelayedPaperclip.process_job(instance_klass, instance_id, attachment_name)
-        Image.find(instance_id).update_columns(finished: true)
+        ExpImage.find(instance_id).update_columns(finished: true)
       end
     end
   end
