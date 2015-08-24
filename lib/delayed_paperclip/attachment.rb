@@ -12,6 +12,7 @@ module DelayedPaperclip
     module InstanceMethods
 
       def delayed_options
+        byebug
         options[:delayed]
       end
 
@@ -51,8 +52,11 @@ module DelayedPaperclip
       end
 
       def delayed_only_process
+        byebug
         only_process = delayed_options[:only_process].dup
+        byebug
         only_process = only_process.call(self) if only_process.respond_to?(:call)
+        byebug
         only_process.map(&:to_sym)
       end
 
